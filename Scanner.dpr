@@ -2,8 +2,8 @@ program Scanner;
 
 uses
   Vcl.Forms,
-  Uscanner in 'Uscanner.pas' {frmScanner},
-  Uthread in 'Uthread.pas';
+  Uscanner in 'Uscanner.pas' {frmScanner};
+ // Uthread in 'Uthread.pas';
 
 {$R *.res}
 
