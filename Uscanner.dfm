@@ -110,7 +110,7 @@ object frmScanner: TfrmScanner
     Height = 256
     ReadOnly = True
     ScrollBars = ssVertical
-    TabOrder = 3
+    TabOrder = 6
   end
   object btnIniciar: TButton
     Left = 461
@@ -118,7 +118,7 @@ object frmScanner: TfrmScanner
     Width = 68
     Height = 25
     Caption = 'Iniciar'
-    TabOrder = 4
+    TabOrder = 3
     OnClick = btnIniciarClick
   end
   object actvtyndctr1: TActivityIndicator
@@ -133,11 +133,11 @@ object frmScanner: TfrmScanner
     Height = 25
     Caption = 'Parar'
     Enabled = False
-    TabOrder = 6
+    TabOrder = 4
     OnClick = btnPararClick
   end
   object idntfrz1: TIdAntiFreeze
-    Left = 368
-    Top = 160
+    Left = 608
+    Top = 8
   end
 end
