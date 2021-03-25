@@ -1,6 +1,6 @@
 # TCP / IP port scanner made in Delphi
 
-![Screenshot](/images/printPortScanner.png)
+![Screenshot](imagens/printPortScanner.png)
 
 # Purpose
 
