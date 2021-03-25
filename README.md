@@ -1,23 +1,23 @@
-# Escaneador de portas TCP/IP feito em Delphi
+# TCP / IP port scanner made in Delphi
 
-![Screenshot](imagens/printPortScanner.png)
+![Screenshot](images/printPortScanner.png)
 
-# Propósito
+# Purpose
 
-O Windows Sockets 2 (Winsock) permite que os programadores criem aplicativos avançados de Internet, intranet e outros aplicativos compatíveis com a rede para transmitir dados de aplicativos através do fio, independente do protocolo de rede que está sendo usado. Com winsock, os programadores têm acesso aos recursos avançados de rede ® Microsoft® Windows® como multicast e Quality of Service (QoS).
+Windows Sockets 2 (Winsock) allows programmers to create advanced Internet, intranet and other network-compatible applications to transmit application data over the wire, regardless of the network protocol being used. With winsock, programmers have access to advanced Microsoft® Windows® networking features such as multicast and Quality of Service (QoS).
 
-# Público desenvolvedor
+# Developer audience
 
-O Windows Sockets 2 foi projetado para uso por programadores C/C++. É necessário familiaridade com a rede Windows.
+Windows Sockets 2 is designed for use by C / C ++ programmers. Familiarity with the Windows network is required.
 
-# Requisitos de tempo de execução
+# Runtime requirements
 
-O Windows Sockets 2 pode ser usado em todas as plataformas do Windows. Quando certas implementações ou recursos das restrições da plataforma Windows Sockets 2 existem, elas são claramente notadas na documentação.
+Windows Sockets 2 can be used on all Windows platforms. When certain implementations or features of the Windows Sockets 2 platform restrictions exist, they are clearly noted in the documentation.
  
-# Mais Sobre Windows Sockets 2
+# More About Windows Sockets 2
 https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-start-page-2?redirectedfrom=MSDN
 
-# Função
-Verificar quais portas no protocolo TCP/IP estão abertas, informando o host = IP
+# Occupation
+Check which ports in the TCP / IP protocol are open, informing the host = IP
 
-Make With love - @boscobecker
+Make With ❤ - @boscobecker
