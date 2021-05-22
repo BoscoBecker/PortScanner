@@ -31,6 +31,7 @@ type
     procedure btnStopClick(Sender: TObject);
   private
     { Private declarations }
+    var tasks : array of TTask;
     procedure StartScanning(const fPortInicio, fPortFim : Integer);
     function PortTCP_IsOpen(dwPort : Word; ipAddressStr: AnsiString) : boolean;
   public
@@ -119,7 +120,7 @@ begin
   end;
 end;
 
-function TfrmScanner.PortTCP_IsOpen(dwPort: Word; ipAddressStr: AnsiString): boolean;
+function TfrmScanner.PortTCP_IsOpen(dwPort: Word;ipAddressStr: AnsiString): boolean;
 var
   client : sockaddr_in;
   sock   : Integer;

@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, IdBaseComponent, IdComponent,
   IdTCPConnection, IdTCPClient, Vcl.WinXCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
-  Vcl.Samples.Spin, IdAntiFreezeBase, IdAntiFreeze,Winsock, System.Threading;
+  Vcl.Samples.Spin, IdAntiFreezeBase, IdAntiFreeze,Winsock, System.Threading,
+  Vcl.ComCtrls;
 
 type
   TfrmScanner = class(TForm)
@@ -15,21 +16,23 @@ type
     seFim: TSpinEdit;
     lblIp: TLabel;
     mmoResultado: TMemo;
-    shp1: TShape;
     lbl1: TLabel;
     lbl2: TLabel;
-    btnIniciar: TButton;
-    lblResultado: TLabel;
+    btnStart: TButton;
     actvtyndctr1: TActivityIndicator;
     lbl3: TLabel;
     idntfrz1: TIdAntiFreeze;
-    btnParar: TButton;
-    procedure btnIniciarClick(Sender: TObject);
-    procedure btnPararClick(Sender: TObject);
+    btnStop: TButton;
+    lblPort: TLabel;
+    mmPortsOpen: TMemo;
+    lblPortsOpen: TLabel;
+    Progress: TProgressBar;
+    procedure btnStartClick(Sender: TObject);
+    procedure btnStopClick(Sender: TObject);
   private
     { Private declarations }
     var tasks : array of TTask;
-    procedure IniciarVarredura(const fPortInicio, fPortFim : Integer);
+    procedure StartScanning(const fPortInicio, fPortFim : Integer);
     function PortTCP_IsOpen(dwPort : Word; ipAddressStr: AnsiString) : boolean;
   public
     { Public declarations }
@@ -44,13 +47,13 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmScanner.btnPararClick(Sender: TObject);
+procedure TfrmScanner.btnStopClick(Sender: TObject);
 begin
   Stop := 1;
-  btnParar.Enabled := False;
+  btnStop.Enabled := False;
 end;
 
-procedure TfrmScanner.btnIniciarClick(Sender: TObject);
+procedure TfrmScanner.btnStartClick(Sender: TObject);
 var
   aTask: ITask;
 begin
@@ -60,18 +63,20 @@ begin
       TThread.Synchronize(TThread.CurrentThread,
        procedure
        begin
-           IniciarVarredura(seInicio.Value, seFim.value);
+           StartScanning(seInicio.Value, seFim.value);
        end);
    end);
   aTask.Start;
 end;
 
-procedure TfrmScanner.IniciarVarredura(const fPortInicio, fPortFim: Integer);
+procedure TfrmScanner.StartScanning(const fPortInicio, fPortFim: Integer);
 var
   iport : Integer;
    ip :  AnsiString;
 begin
-  btnParar.Enabled := True;
+  Progress.Max := fPortFim;
+  btnStop.Enabled := True;
+  btnStart.Enabled := False;
   actvtyndctr1.Animate := True;
   try
       Stop:= 0 ;
@@ -79,32 +84,30 @@ begin
       ip := AnsiString(edtIp.Text);
 
       mmoResultado.lines.Clear;
-      mmoResultado.lines.Add('Starting verificartion of port, '+
-                             'for host: ' + edtIp.text);
+      mmoResultado.lines.Add('Starting verificartion of port, '+'for host: ' + edtIp.text);
       mmoResultado.lines.add(#13);
 
       while iport <= fPortFim do
       Begin
         Application.ProcessMessages;
-
         if Stop = 1 then
         begin
           mmoResultado.lines.Add('Verification terminated by user');
+          Progress.Position := fPortFim;
           break;
         end;
 
-        Application.ProcessMessages;
+        if PortTCP_IsOpen(iport, PAnsiChar(ip)) then
+        begin
+          mmoResultado.lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .');
+          mmPortsOpen.Lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .')
+        end
+        else
+          mmoResultado.lines.add('The port '+ inttostr(iport)+ ' are Closed.');
 
-        Try
-          if PortTCP_IsOpen(iport, PAnsiChar(ip)) then
-            mmoResultado.lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .')
-          else
-            mmoResultado.lines.add('The port '+ inttostr(iport)+ ' are Closed.');
-        Finally
-          Inc(iport);
-          seInicio.Value := iport;
-          Application.ProcessMessages;
-        end;
+        progress.Position := iport;
+        Inc(iport);
+        seInicio.Value := iport;
       End;
 
   finally
@@ -112,11 +115,12 @@ begin
     seInicio.Value := 1;
     mmoResultado.lines.add('Verification completed.');
     actvtyndctr1.Animate := False;
-    btnParar.Enabled := False;
+    btnStop.Enabled := False;
+    btnStart.Enabled := True;
   end;
 end;
 
-function TfrmScanner.PortTCP_IsOpen(dwPort: Word;ipAddressStr: AnsiString): boolean;
+function TfrmScanner.PortTCP_IsOpen(dwPort: Word; ipAddressStr: AnsiString): boolean;
 var
   client : sockaddr_in;
   sock   : Integer;

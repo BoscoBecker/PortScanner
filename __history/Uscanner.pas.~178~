@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, IdBaseComponent, IdComponent,
   IdTCPConnection, IdTCPClient, Vcl.WinXCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
-  Vcl.Samples.Spin, IdAntiFreezeBase, IdAntiFreeze,Winsock, System.Threading;
+  Vcl.Samples.Spin, IdAntiFreezeBase, IdAntiFreeze,Winsock, System.Threading,
+  Vcl.ComCtrls;
 
 type
   TfrmScanner = class(TForm)
@@ -15,7 +16,6 @@ type
     seFim: TSpinEdit;
     lblIp: TLabel;
     mmoResultado: TMemo;
-    shp1: TShape;
     lbl1: TLabel;
     lbl2: TLabel;
     btnStart: TButton;
@@ -23,6 +23,10 @@ type
     lbl3: TLabel;
     idntfrz1: TIdAntiFreeze;
     btnStop: TButton;
+    lblPort: TLabel;
+    mmPortsOpen: TMemo;
+    lblPortsOpen: TLabel;
+    Progress: TProgressBar;
     procedure btnStartClick(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
   private
@@ -70,7 +74,9 @@ var
   iport : Integer;
    ip :  AnsiString;
 begin
-  btnStart.Enabled := True;
+  Progress.Max := fPortFim;
+  btnStop.Enabled := True;
+  btnStart.Enabled := False;
   actvtyndctr1.Animate := True;
   try
       Stop:= 0 ;
@@ -78,32 +84,28 @@ begin
       ip := AnsiString(edtIp.Text);
 
       mmoResultado.lines.Clear;
-      mmoResultado.lines.Add('Starting verificartion of port, '+
-                             'for host: ' + edtIp.text);
+      mmoResultado.lines.Add('Starting verificartion of port, '+'for host: ' + edtIp.text);
       mmoResultado.lines.add(#13);
 
       while iport <= fPortFim do
       Begin
-        Application.ProcessMessages;
-
         if Stop = 1 then
         begin
           mmoResultado.lines.Add('Verification terminated by user');
+          Progress.Position := fPortFim;
           break;
         end;
 
-        Application.ProcessMessages;
+        if PortTCP_IsOpen(iport, PAnsiChar(ip)) then
+        begin
+          mmoResultado.lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .');
+          mmPortsOpen.Lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .')
+        end
+        else
+          mmoResultado.lines.add('The port '+ inttostr(iport)+ ' are Closed.');
 
-        Try
-          if PortTCP_IsOpen(iport, PAnsiChar(ip)) then
-            mmoResultado.lines.add('* OPEN * The port '+ inttostr(iport)+ ' are Open .')
-          else
-            mmoResultado.lines.add('The port '+ inttostr(iport)+ ' are Closed.');
-        Finally
-          Inc(iport);
-          seInicio.Value := iport;
-          Application.ProcessMessages;
-        end;
+        Inc(iport);
+        seInicio.Value := iport;
       End;
 
   finally
@@ -112,6 +114,8 @@ begin
     mmoResultado.lines.add('Verification completed.');
     actvtyndctr1.Animate := False;
     btnStop.Enabled := False;
+    btnStart.Enabled := True;
+
   end;
 end;
 

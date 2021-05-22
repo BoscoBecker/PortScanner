@@ -4,8 +4,8 @@ object frmScanner: TfrmScanner
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Automatic scanner port'
-  ClientHeight = 473
-  ClientWidth = 663
+  ClientHeight = 508
+  ClientWidth = 735
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -50,6 +50,20 @@ object frmScanner: TfrmScanner
     Font.Style = []
     ParentFont = False
   end
+  object lblPort: TLabel
+    Left = 16
+    Top = 93
+    Width = 63
+    Height = 13
+    Caption = 'Port scanned'
+  end
+  object lblPortsOpen: TLabel
+    Left = 371
+    Top = 94
+    Width = 67
+    Height = 13
+    Caption = 'Port Openned'
+  end
   object edtIp: TEdit
     Left = 72
     Top = 61
@@ -82,7 +96,7 @@ object frmScanner: TfrmScanner
   object mmoResultado: TMemo
     Left = 16
     Top = 112
-    Width = 625
+    Width = 349
     Height = 352
     ReadOnly = True
     ScrollBars = ssVertical
@@ -111,7 +125,24 @@ object frmScanner: TfrmScanner
     TabOrder = 4
     OnClick = btnStopClick
   end
+  object mmPortsOpen: TMemo
+    Left = 371
+    Top = 113
+    Width = 349
+    Height = 352
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 7
+  end
+  object Progress: TProgressBar
+    Left = 16
+    Top = 472
+    Width = 704
+    Height = 17
+    TabOrder = 8
+  end
   object idntfrz1: TIdAntiFreeze
+    IdleTimeOut = 2
     Left = 608
     Top = 8
   end
